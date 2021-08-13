@@ -99,3 +99,96 @@ void Snake::Extend()
         }
     }
 }
+
+void Snake::Tick()
+{
+    if (m_snakeBody.empty())
+    {
+        return;
+    }
+    if (m_dir == Direction::None)
+    {
+        return;
+    }
+    Move();
+    CheckCollision();
+}
+
+void Snake::Move()
+{
+    for (int i = m_snakeBody.size() - 1; i > 0; --i)
+    {
+        m_snakeBody[i].position = m_snakeBody[i - 1].position;
+    }
+
+    if (m_dir == Direction::Left)
+    {
+        --m_snakeBody[0].position.x;
+    }
+    if (m_dir == Direction::Right)
+    {
+        ++m_snakeBody[0].position.x;
+    }
+    if (m_dir == Direction::Up)
+    {
+        --m_snakeBody[0].position.y;
+    }
+    if (m_dir == Direction::Down)
+    {
+        ++m_snakeBody[0].position.y;
+    }
+}
+
+void Snake::CheckCollision()
+{
+    if (m_snakeBody.size() < 5)
+    {
+        return;
+    }
+
+    SnakeSegment& head = m_snakeBody.front();
+
+    for (auto itr = m_snakeBody.begin() + 1; itr != m_snakeBody.end(); ++itr)
+    {
+        if (itr->position == head.position)
+        {
+            int segments = m_snakeBody.end() - itr;
+            Cut(segments);
+            break;
+        }
+    }
+}
+
+void Snake::Cut(int l_segments)
+{
+    for (int i = 0; i < l_segments; ++i)
+    {
+        m_snakeBody.pop_back();
+    }
+    --m_lives;
+    if (!m_lives)
+    {
+        Lose();
+        return;
+    }
+}
+
+void Snake::Render(sf::RenderWindow& l_window)
+{
+    if (m_snakeBody.empty())
+    {
+        return;
+    }
+
+    auto head = m_snakeBody.begin();
+
+    m_bodyRect.setFillColor(sf::Color::Yellow);
+    m_bodyRect.setPosition(head->position.x * m_size, head->position.y * m_size);
+    l_window.draw(m_bodyRect);
+
+    m_bodyRect.setFillColor(sf::Color::Green);
+    for (auto itr = m_snakeBody.begin() + 1; itr != m_snakeBody.end(); ++itr)
+    {
+        m_bodyRect.setPosition(itr->position.x * m_size, itr->position.y * m_size);
+    }
+}
