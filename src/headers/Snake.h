@@ -1,16 +1,24 @@
 #include <SFML/Graphics.hpp>
 
-
-struct SnakeSegment {
+struct SnakeSegment
+{
     SnakeSegment(int x, int y) : position(x, y) {}
     sf::Vector2i position;
 };
 
 using SnakeContainer = std::vector<SnakeSegment>;
 
-enum class Direction { None, Up, Down, Left, Right };
+enum class Direction
+{
+    None,
+    Up,
+    Down,
+    Left,
+    Right
+};
 
-class Snake {
+class Snake
+{
 public:
     Snake(int l_blockSize);
     ~Snake();
@@ -34,7 +42,7 @@ public:
     void Move();
     void Tick();
     void Cut(int l_segments);
-    void Render(sf::RenderWindow& l_window);
+    void Render(sf::RenderWindow &l_window);
 
 private:
     void CheckCollision();
