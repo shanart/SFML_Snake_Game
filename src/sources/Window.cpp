@@ -10,7 +10,6 @@ void Window::Setup(const std::string title, const sf::Vector2u &size)
     m_windowSize = size;
     m_isFullscreen = false;
     m_isDone = false;
-    m_window.setFramerateLimit(60);
     Create();
 }
 
@@ -33,17 +32,13 @@ void Window::EndDraw() { m_window.display(); }
 bool Window::IsDone() { return m_isDone; }
 bool Window::IsFullscreen() { return m_isFullscreen; }
 
-void Window::Draw(sf::Drawable &l_drawable)
-{
-    m_window.draw(l_drawable);
-}
-
+sf::RenderWindow *Window::GetRenderWindow() { return &m_window; }
 sf::Vector2u Window::GetWindowSize() { return m_windowSize; }
 
 void Window::ToggleFullscreen()
 {
     m_isFullscreen = !m_isFullscreen;
-    Destroy();
+    m_window.close();
     Create();
 }
 
@@ -53,6 +48,10 @@ void Window::Update()
     while (m_window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
+        {
+            m_isDone = true;
+        }
+        else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
         {
             m_isDone = true;
         }

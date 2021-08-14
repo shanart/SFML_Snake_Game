@@ -1,5 +1,8 @@
 #pragma once
 #include "Window.h"
+#include "World.h"
+#include "Snake.h"
+#include "Textbox.h"
 
 class Game
 {
@@ -11,19 +14,17 @@ public:
     void Update();
     void Render();
 
-    Window *GetWindow();
-
     sf::Time GetElapsed();
     void RestartClock();
 
-private:
-    void MoveMushroom();
+    Window *GetWindow();
 
+private:
     Window m_window;
     sf::Clock m_clock;
-    sf::Time m_elapsed;
+    float m_elapsed;
 
-    sf::Texture m_mushroomTexture;
-    sf::Sprite m_mushroom;
-    sf::Vector2i m_increment;
+    World m_world;
+    Snake m_snake;
+    Textbox m_textbox;
 };

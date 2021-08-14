@@ -1,4 +1,7 @@
+#pragma once
 #include <SFML/Graphics.hpp>
+#include "Textbox.h"
+#include <vector>
 
 struct SnakeSegment
 {
@@ -7,7 +10,6 @@ struct SnakeSegment
 };
 
 using SnakeContainer = std::vector<SnakeSegment>;
-
 enum class Direction
 {
     None,
@@ -20,7 +22,7 @@ enum class Direction
 class Snake
 {
 public:
-    Snake(int l_blockSize);
+    Snake(int l_blockSize, Textbox *l_log);
     ~Snake();
 
     // Helper methods.
@@ -33,26 +35,29 @@ public:
     void IncreaseScore();
     bool HasLost();
 
-    void Lose();
+    void Lose(); // Handle losing here.
     void ToggleLost();
 
-    void Extend();
-    void Reset();
+    Direction GetPhysicalDirection();
 
-    void Move();
-    void Tick();
-    void Cut(int l_segments);
+    void Extend(); // Grow the snake.
+    void Reset();  // Reset to starting position.
+
+    void Move();              // Movement method.
+    void Tick();              // Update method.
+    void Cut(int l_segments); // Method for cutting snake.
     void Render(sf::RenderWindow &l_window);
 
 private:
-    void CheckCollision();
+    void CheckCollision(); // Checking collisions.
 
-    SnakeContainer m_snakeBody;
-    int m_size;
-    Direction m_dir;
-    int m_speed;
-    int m_lives;
-    int m_score;
-    bool m_lost;
-    sf::RectangleShape m_bodyRect;
+    SnakeContainer m_snakeBody;    // Segment vector.
+    int m_size;                    // Size of the graphics.
+    Direction m_dir;               // Current direction.
+    int m_speed;                   // Speed of the snake.
+    int m_lives;                   // Lives.
+    int m_score;                   // Score.
+    bool m_lost;                   // Losing state.
+    sf::RectangleShape m_bodyRect; // Shape used in rendering.
+    Textbox *m_log;
 };
