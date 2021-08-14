@@ -2,7 +2,7 @@
 
 World::World(sf::Vector2u l_windSize)
 {
-    m_blockSize = 16;
+    m_blockSize = 25;
 
     m_windowSize = l_windSize;
     RespawnApple();
